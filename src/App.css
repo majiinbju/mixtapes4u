@@ -248,3 +248,20 @@ button {
 .button-added:hover {
   background: #737373;
 }
+
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 24px;
+  color: #1db954;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
