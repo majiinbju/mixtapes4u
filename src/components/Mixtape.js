@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState } from 'react';
+import { useMixtape } from '../context/MixtapeContext';
 
-function Mixtape({ songs, onRemove }) {
+function Mixtape({ songs }) {
   const [notes, setNotes] = useState({});
+  const { toggleSong } = useMixtape();
+
   const handleNoteChange = (songId, noteText) => {
     setNotes({
       ...notes,
-      [songId]: noteText,
+      [songId]: noteText
     });
   };
 
@@ -20,27 +23,26 @@ function Mixtape({ songs, onRemove }) {
   return (
     <div className="mixtape">
       <h2>💕 Your Mixtape ({songs.length} songs)</h2>
-
-      {songs.map((song) => (
+      
+      {songs.map(song => (
         <div key={song.id} className="mixtape-song">
           <div className="mixtape-song-info">
-            <img
-              src={song.albumArt}
-              alt={song.title}
-              className="mixtape-album-art"
-            />
+            <img src={song.albumArt} alt={song.title} className="mixtape-album-art" />
             <div>
               <h3>{song.title}</h3>
               <p>{song.artist}</p>
             </div>
-            <button onClick={() => onRemove(song.id)} className="remove-button">
+            <button 
+              onClick={() => toggleSong(song.id)}
+              className="remove-button"
+            >
               ✕
             </button>
           </div>
-
+          
           <textarea
             placeholder="Why does this song make you think of them? 💭"
-            value={notes[song.id] || ""}
+            value={notes[song.id] || ''}
             onChange={(e) => handleNoteChange(song.id, e.target.value)}
             className="note-input"
           />
