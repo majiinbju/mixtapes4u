@@ -1,7 +1,8 @@
 import { useState } from "react";
-import Mixtape from "./Mixtape";
 import "./App.css";
-import SongCard from "./SongCard";
+import Mixtape from "./components/Mixtape";
+import SongCard from "./components/SongCard";
+import SearchBar from "./components/SearchBar";
 
 function App() {
   // Array of song objects
@@ -80,23 +81,7 @@ function App() {
         <h1>Mixtapes4U</h1>
         <p className="counter">Songs in mixtape: {addedSongs.length}</p>
 
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Search for songs..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="search-input"
-          />
-          {searchQuery && (
-            <button
-              onClick={() => setSearchQuery("")}
-              className="clear-search-button"
-            >
-              ✕
-            </button>
-          )}
-        </div>
+        <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
 
         <div className="song-list">
           {filteredSongs.length > 0 ? (
