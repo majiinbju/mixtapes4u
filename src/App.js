@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import Mixtape from "./components/Mixtape";
 import SongCard from "./components/SongCard";
@@ -6,7 +6,7 @@ import SearchBar from "./components/SearchBar";
 
 function App() {
   // Array of song objects
-  const songs = [
+  const songsData = [
     {
       id: 1,
       title: "Wonderwall",
@@ -49,9 +49,24 @@ function App() {
     },
   ];
 
-  // Track which songs are added
+  // New state for songs and loading
+  const [songs, setSongs] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [addedSongs, setAddedSongs] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // useEffect runs after component mounts
+  useEffect(() => {
+    // Simulate API call with setTimeout
+    const fetchSongs = () => {
+      setTimeout(() => {
+        setSongs(songsData);
+        setIsLoading(false);
+      }, 1000); 
+    };
+    
+    fetchSongs(); // Call the function!
+  }, []); // Empty dependency array = run once on mount
 
   // Function to add or remove a song
   const toggleSong = (songId) => {
@@ -64,6 +79,7 @@ function App() {
     }
   };
 
+  // Filter songs based on search
   const filteredSongs = songs.filter((song) => {
     const query = searchQuery.toLowerCase();
     return (
@@ -83,26 +99,32 @@ function App() {
 
         <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
 
-        <div className="song-list">
-          {filteredSongs.length > 0 ? (
-            filteredSongs.map((song) => (
-              <SongCard
-                key={song.id}
-                id={song.id}
-                title={song.title}
-                artist={song.artist}
-                duration={song.duration}
-                albumArt={song.albumArt}
-                isAdded={addedSongs.includes(song.id)}
-                onToggle={toggleSong}
-              />
-            ))
-          ) : (
-            <p className="no-results">
-              No songs found. Try a different search!
-            </p>
-          )}
-        </div>
+        {isLoading ? (
+          <div className="loading">
+            <p>🎵 Loading songs...</p>
+          </div>
+        ) : (
+          <div className="song-list">
+            {filteredSongs.length > 0 ? (
+              filteredSongs.map(song => (
+                <SongCard
+                  key={song.id}
+                  id={song.id}
+                  title={song.title}
+                  artist={song.artist}
+                  duration={song.duration}
+                  albumArt={song.albumArt}
+                  isAdded={addedSongs.includes(song.id)}
+                  onToggle={toggleSong}
+                />
+              ))
+            ) : (
+              <p className="no-results">
+                No songs found. Try a different search!
+              </p>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="sidebar">
