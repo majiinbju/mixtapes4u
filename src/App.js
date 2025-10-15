@@ -3,6 +3,7 @@ import "./App.css";
 import Mixtape from "./components/Mixtape";
 import SongCard from "./components/SongCard";
 import SearchBar from "./components/SearchBar";
+import { useMixtape } from "./context/MixtapeContext";
 
 function App() {
   // Array of song objects
@@ -51,8 +52,8 @@ function App() {
 
   // New state for songs and loading
   const [songs, setSongs] = useState([]);
+  const { addedSongs, toggleSong } = useMixtape();
   const [isLoading, setIsLoading] = useState(true);
-  const [addedSongs, setAddedSongs] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
   // useEffect runs after component mounts
@@ -67,17 +68,6 @@ function App() {
     
     fetchSongs(); // Call the function!
   }, []); // Empty dependency array = run once on mount
-
-  // Function to add or remove a song
-  const toggleSong = (songId) => {
-    if (addedSongs.includes(songId)) {
-      // Remove
-      setAddedSongs(addedSongs.filter((id) => id !== songId));
-    } else {
-      // Add it
-      setAddedSongs([...addedSongs, songId]);
-    }
-  };
 
   // Filter songs based on search
   const filteredSongs = songs.filter((song) => {
@@ -114,8 +104,6 @@ function App() {
                   artist={song.artist}
                   duration={song.duration}
                   albumArt={song.albumArt}
-                  isAdded={addedSongs.includes(song.id)}
-                  onToggle={toggleSong}
                 />
               ))
             ) : (
