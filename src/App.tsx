@@ -4,10 +4,10 @@ import Mixtape from "./components/Mixtape";
 import SongCard from "./components/SongCard";
 import SearchBar from "./components/SearchBar";
 import { useMixtape } from "./context/MixtapeContext";
+import { Song } from "./types";
 
 function App() {
-  // Array of song objects
-  const songsData = [
+  const songsData: Song[] = [
     {
       id: 1,
       title: "Wonderwall",
@@ -50,27 +50,25 @@ function App() {
     },
   ];
 
-  // New state for songs and loading
-  const [songs, setSongs] = useState([]);
-  const { addedSongs, toggleSong } = useMixtape();
-  const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [songs, setSongs] = useState<Song[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
-  // useEffect runs after component mounts
+  const { addedSongs } = useMixtape();
+
   useEffect(() => {
-    // Simulate API call with setTimeout
-    const fetchSongs = () => {
+    const fetchSongs = (): void => {
       setTimeout(() => {
         setSongs(songsData);
         setIsLoading(false);
       }, 1000); 
     };
     
-    fetchSongs(); // Call the function!
-  }, []); // Empty dependency array = run once on mount
+    fetchSongs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // Filter songs based on search
-  const filteredSongs = songs.filter((song) => {
+  const filteredSongs: Song[] = songs.filter((song) => {
     const query = searchQuery.toLowerCase();
     return (
       song.title.toLowerCase().includes(query) ||
@@ -78,8 +76,7 @@ function App() {
     );
   });
 
-  // Get full song objects for added songs
-  const mixtapeSongs = songs.filter((song) => addedSongs.includes(song.id));
+  const mixtapeSongs: Song[] = songs.filter((song) => addedSongs.includes(song.id));
 
   return (
     <div className="App">
@@ -116,7 +113,7 @@ function App() {
       </div>
 
       <div className="sidebar">
-        <Mixtape songs={mixtapeSongs} onRemove={toggleSong} />
+        <Mixtape songs={mixtapeSongs} />
       </div>
     </div>
   );

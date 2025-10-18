@@ -1,11 +1,20 @@
 import { useState } from 'react';
 import { useMixtape } from '../context/MixtapeContext';
+import { Song } from '../types';
 
-function Mixtape({ songs }) {
-  const [notes, setNotes] = useState({});
+interface MixtapeProps {
+  songs: Song[];
+}
+
+interface Notes {
+  [key: number]: string;
+}
+
+function Mixtape({ songs }: MixtapeProps) {
+  const [notes, setNotes] = useState<Notes>({});
   const { toggleSong } = useMixtape();
 
-  const handleNoteChange = (songId, noteText) => {
+  const handleNoteChange = (songId: number, noteText: string): void => {
     setNotes({
       ...notes,
       [songId]: noteText
